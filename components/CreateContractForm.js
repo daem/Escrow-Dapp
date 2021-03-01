@@ -31,6 +31,9 @@ const CreateContractForm = () => {
 
     const [wei, setWei] = useState("1000000000000000000");
 
+    const [contractArray, setContractArray] = useState([]);
+    // const contractArray = [];
+
     useEffect(() => {
         console.log(reciever, checker, wei);
     }, [checker, reciever, wei]);
@@ -50,10 +53,22 @@ const CreateContractForm = () => {
     let contractNum = 0;
     const newContract = async (e) => {
         e.preventDefault();
+        console.log("about to set contractArray1");
+
         const con = await deploy(checker, reciever, wei);
         setContract(con);
         contractNum++;
-        //addContract(++contracts, contract, arbiter, beneficiary, value);
+
+        setContractArray((contractArray) => [
+            ...contractArray,
+            {
+                contractNum: contractNum,
+                contract: con,
+                checker: checker,
+                reciever: reciever,
+                wei: wei,
+            },
+        ]);
     };
 
     return (
@@ -105,7 +120,7 @@ const CreateContractForm = () => {
                 </form>
             </Grid>
 
-            <Grid container spacing={3} justify="center" alignItems="center">
+            {/*} <Grid container spacing={3} justify="center" alignItems="center">
                 <Grid item xs={8}>
                     {contract ? (
                         <ContractList
@@ -118,6 +133,20 @@ const CreateContractForm = () => {
                     ) : (
                         ""
                     )}
+                </Grid>
+                    </Grid>*/}
+
+            <Grid container spacing={3} justify="center" alignItems="center">
+                <Grid item xs={8}>
+                    {contractArray?.map((e, idx) => (
+                        <ContractList
+                            contractNum={idx}
+                            contract={e.contract}
+                            checker={e.checker}
+                            reciever={e.reciever}
+                            wei={e.wei}
+                        />
+                    ))}
                 </Grid>
             </Grid>
         </Box>

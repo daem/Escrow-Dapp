@@ -12,13 +12,19 @@ import { ethers } from "ethers";
 const ContractList = ({ contractNum, contract, checker, reciever, wei }) => {
     // await window.ethereum.enable();
     // const provcontractNumer = new ethers.provcontractNumers.Web3ProvcontractNumer(window.ethereum);
-    const [status, setStatus] = useState(false);
+    const [status, setStatus] = useState("Not Approved");
+
+    console.log(contractNum);
+    console.log(contract);
+    console.log(checker);
+    console.log(reciever);
+    console.log(wei);
 
     contract?.on("Approved", () => {
-        setStatus(true);
+        setStatus("Approved");
     });
 
-    console.log("con", contract);
+    // console.log("con", contract);
 
     const approve = async () => {
         await window.ethereum.enable();
@@ -28,7 +34,7 @@ const ContractList = ({ contractNum, contract, checker, reciever, wei }) => {
         //gets the signer to call the function
         console.log(signer);
         await contract?.connect(signer).approve();
-        console.log("approveddd");
+        setStatus("Checking...");
     };
 
     return (
@@ -48,7 +54,7 @@ const ContractList = ({ contractNum, contract, checker, reciever, wei }) => {
                     Wei : {wei}
                 </Typography>
                 <Typography variant="body2" component="p">
-                    Status : {status ? "Approved" : "Not Approved"}
+                    Status : {status}
                 </Typography>
             </CardContent>
             <CardActions>
